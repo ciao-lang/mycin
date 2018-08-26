@@ -12,6 +12,7 @@
 :- data message_of/5.          % Keep Tracking of error messages.
 :- data doing_what/2.          % Currently doing DOING_MESSAGE.
 
+:- use_module(engine(io_aux)).
 :- use_module(library(compiler/c_itf), 
 	[
 	    module_error/0,
