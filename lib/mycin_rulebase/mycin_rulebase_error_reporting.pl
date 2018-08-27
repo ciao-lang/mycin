@@ -12,7 +12,7 @@
 :- data message_of/5.          % Keep Tracking of error messages.
 :- data doing_what/2.          % Currently doing DOING_MESSAGE.
 
-:- use_module(engine(io_aux)).
+:- use_module(engine(messages_basic)).
 :- use_module(library(compiler/c_itf), 
 	[
 	    module_error/0,
@@ -43,15 +43,15 @@ end_of_messages(_).
 
 dump_messages(Module) :-
 	doing_what(Module,Doing),
-	message(['{'|Doing]),
+	message(user, ['{'|Doing]),
 	message_of(Module,Kind,LN0,LN1,Message),
-	(LN0 \== '?' -> io_aux:message_lns(Kind,LN0,LN1,Message) ;
-	                io_aux:message(Kind,Message) 
+	(LN0 \== '?' -> messages_basic:message_lns(Kind,LN0,LN1,Message) ;
+	                messages_basic:message(Kind,Message) 
 	),
 	fail.
 
 dump_messages(_) :-
-	message(['}']).
+	message(user, ['}']).
 
 :- set_prolog_flag(multi_arity_warnings,off).
 

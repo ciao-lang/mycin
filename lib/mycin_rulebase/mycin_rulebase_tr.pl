@@ -22,7 +22,7 @@
 %%   certainty propagation.
 %%----------------------------------------------------------------------
 
-:- use_module(engine(io_aux), [message/1, message/2]).
+:- use_module(engine(messages_basic), [message/2]).
 :- use_module(library(compiler/c_itf)).
 :- use_module(library(lists)).
 :- use_module(library(aggregates)).
@@ -46,7 +46,7 @@
 mycin_sentence_tr(A,B,M) :-
 	sentence_tr(A,B,M),
 	( debug_1st_pass ->
-	  message(['1ST: ', ~~(A),' ==> ', ~~(B)])
+	  message(debug, ['1ST: ', ~~(A),' ==> ', ~~(B)])
 	;
 	  true
 	).
@@ -54,7 +54,7 @@ mycin_sentence_tr(A,B,M) :-
 mycin_clause_tr(clause(A,B),clause(C,D),M) :-
 	clause_tr(clause(A,B),clause(C,D),M),
 	( debug_2nd_pass ->
-	  message(['2ND: ( ',~~(A),' :- ',~~(B),' ) ==> ( ',~~(C),' :- ',~~(D),' ) '])
+	  message(debug, ['2ND: ( ',~~(A),' :- ',~~(B),' ) ==> ( ',~~(C),' :- ',~~(D),' ) '])
 	;
 	  true
 	).
