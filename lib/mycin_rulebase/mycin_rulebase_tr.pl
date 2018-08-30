@@ -25,6 +25,7 @@
 :- use_module(engine(messages_basic), [message/2]).
 :- use_module(library(compiler/c_itf)).
 :- use_module(library(lists)).
+:- use_module(engine(data_facts)).
 :- use_module(library(aggregates)).
 :- use_module(library(mycin_rulebase/mycin_rulebase_error_reporting)).
 
