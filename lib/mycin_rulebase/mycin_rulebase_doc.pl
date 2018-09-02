@@ -11,7 +11,7 @@
 :- doc(author, "Angel Fernandez Pineda").
 :- doc(author, "Jose F. Morales (maintenance)").
 
-:- doc(copyright,"@include{DocCopyright.lpdoc}").
+:- doc(copyright,"@include{FreeDocLicense.lpdoc}").
 
 :- doc(summary, "This library enables MYCIN-style inference using
    certainty factors on rules.").
