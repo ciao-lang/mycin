@@ -1,9 +1,9 @@
 :- module(mycin_rulebase_error_reporting,
-	[
-	    start_of_messages/2,
-	    end_of_messages/1,
-	    message/3
-	]).
+    [
+        start_of_messages/2,
+        end_of_messages/1,
+        message/3
+    ]).
 
 %! \title Error reporting
 
@@ -14,55 +14,55 @@
 
 :- use_module(engine(messages_basic)).
 :- use_module(library(compiler/c_itf), 
-	[
-	    module_error/0,
-	    location/3,
-	    module_from_base/2,
-	    file_data/3
-	]).
+    [
+        module_error/0,
+        location/3,
+        module_from_base/2,
+        file_data/3
+    ]).
 
 %%------------------------------------------------------------------------
 
 
 start_of_messages(Module,DoingWhat) :-
-	retractall_fact(message_of(Module,_,_,_,_)),
-	retractall_fact(doing_what(Module,_)),
-	asserta_fact(doing_what(Module,DoingWhat)).
+    retractall_fact(message_of(Module,_,_,_,_)),
+    retractall_fact(doing_what(Module,_)),
+    asserta_fact(doing_what(Module,DoingWhat)).
 
 end_of_messages(Module) :-
-	current_prolog_flag(verbose_compilation,on),
-	!,
-	dump_messages(Module).
+    current_prolog_flag(verbose_compilation,on),
+    !,
+    dump_messages(Module).
 
 end_of_messages(Module) :-
-	( message_of(Module,error,_,_,_) ; message_of(Module,warning,_,_,_) ),
-	!,
-	dump_messages(Module).
+    ( message_of(Module,error,_,_,_) ; message_of(Module,warning,_,_,_) ),
+    !,
+    dump_messages(Module).
 
 end_of_messages(_).
 
 dump_messages(Module) :-
-	doing_what(Module,Doing),
-	message(user, ['{'|Doing]),
-	message_of(Module,Kind,LN0,LN1,Message),
-	(LN0 \== '?' -> messages_basic:message_lns(Kind,LN0,LN1,Message) ;
-	                messages_basic:message(Kind,Message) 
-	),
-	fail.
+    doing_what(Module,Doing),
+    message(user, ['{'|Doing]),
+    message_of(Module,Kind,LN0,LN1,Message),
+    (LN0 \== '?' -> messages_basic:message_lns(Kind,LN0,LN1,Message) ;
+                    messages_basic:message(Kind,Message) 
+    ),
+    fail.
 
 dump_messages(_) :-
-	message(user, ['}']).
+    message(user, ['}']).
 
 :- set_prolog_flag(multi_arity_warnings,off).
 
 message(Module,Kind,Message) :-
-	module_from_base(Module,Base),
-	file_data(Base,Source,_),
-	location(Source,LN0,LN1),
-	!,
-	assertz_fact(message_of(Module,Kind,LN0,LN1,Message)),
-	(Kind = error -> set_fact(module_error) ; true ).
+    module_from_base(Module,Base),
+    file_data(Base,Source,_),
+    location(Source,LN0,LN1),
+    !,
+    assertz_fact(message_of(Module,Kind,LN0,LN1,Message)),
+    (Kind = error -> set_fact(module_error) ; true ).
 
 message(Module,Kind,Message) :-
-	assertz_fact(message_of(Module,Kind,'?','?',Message)),
-	(Kind = error -> set_fact(module_error) ; true ).
+    assertz_fact(message_of(Module,Kind,'?','?',Message)),
+    (Kind = error -> set_fact(module_error) ; true ).

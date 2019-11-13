@@ -9,7 +9,7 @@ filepath := at_bundle(mycin, 'lib').
 filepath := at_bundle(mycin, 'examples').
 
 doc_structure := 
-	'mycin_rulebase/mycin_rulebase_doc'.
+    'mycin_rulebase/mycin_rulebase_doc'.
 
 doc_mainopts := no_biblio | no_bugs | no_patches.
 doc_compopts := no_biblio | no_bugs | no_patches.

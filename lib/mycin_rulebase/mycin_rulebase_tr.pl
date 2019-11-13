@@ -44,20 +44,20 @@
 %%----------------------------------------------------------------------
 
 mycin_sentence_tr(A,B,M) :-
-	sentence_tr(A,B,M),
-	( debug_1st_pass ->
-	  message(debug, ['1ST: ', ~~(A),' ==> ', ~~(B)])
-	;
-	  true
-	).
+    sentence_tr(A,B,M),
+    ( debug_1st_pass ->
+      message(debug, ['1ST: ', ~~(A),' ==> ', ~~(B)])
+    ;
+      true
+    ).
 
 mycin_clause_tr(clause(A,B),clause(C,D),M) :-
-	clause_tr(clause(A,B),clause(C,D),M),
-	( debug_2nd_pass ->
-	  message(debug, ['2ND: ( ',~~(A),' :- ',~~(B),' ) ==> ( ',~~(C),' :- ',~~(D),' ) '])
-	;
-	  true
-	).
+    clause_tr(clause(A,B),clause(C,D),M),
+    ( debug_2nd_pass ->
+      message(debug, ['2ND: ( ',~~(A),' :- ',~~(B),' ) ==> ( ',~~(C),' :- ',~~(D),' ) '])
+    ;
+      true
+    ).
 
 %%----------------------------------------------------------------------
 %%
@@ -70,40 +70,40 @@ mycin_clause_tr(clause(A,B),clause(C,D),M) :-
 %%----------------------------------------------------------------------
 
 sentence_tr(0,_,Module) :-
-	start_of_messages(Module,'Generating mycin interface '),
-	retractall_fact(mycin_pred(Module,_,_)),
-	!,
-	fail.
+    start_of_messages(Module,'Generating mycin interface '),
+    retractall_fact(mycin_pred(Module,_,_)),
+    !,
+    fail.
 
 %%----------------------------------------------------------------------
 %% END OF FIRST PASS EXPANSION
 %%----------------------------------------------------------------------
 
 sentence_tr(end_of_file,Clauses,Module) :-
-	!,
-	validate_exports(Module),
-	findall( (:- export(F/AA)),
-                 (exported(Module,F,A),AA is A+1),
-		 ExportDecls),
-	findall( (ExpGoal :- '$mycin_rule$'(Goal,CF)),
-	         ( exported(Module,F,A),
-                   AA is A+1,
-		   functor(ExpGoal,F,AA),
-		   ExpGoal =.. [F,CF|Args],
-		   Goal =.. [F|Args]
-		 ),
-		 EntryPoints),
-	findall((:- mycin_pred(F/A)),mycin_pred(Module,F,A),Decls),
-	append(ExportDecls,EntryPoints,Aux1),
-	append(Aux1,Decls,Aux2),
-	append(Aux2,
-	[
-%	    (:- multifile('$mycin_rule$'/2)),
-	    ('$$eof$$'),
-	    end_of_file
-        ],Clauses),
-	end_of_messages(Module),
-	true.
+    !,
+    validate_exports(Module),
+    findall( (:- export(F/AA)),
+             (exported(Module,F,A),AA is A+1),
+             ExportDecls),
+    findall( (ExpGoal :- '$mycin_rule$'(Goal,CF)),
+             ( exported(Module,F,A),
+               AA is A+1,
+               functor(ExpGoal,F,AA),
+               ExpGoal =.. [F,CF|Args],
+               Goal =.. [F|Args]
+             ),
+             EntryPoints),
+    findall((:- mycin_pred(F/A)),mycin_pred(Module,F,A),Decls),
+    append(ExportDecls,EntryPoints,Aux1),
+    append(Aux1,Decls,Aux2),
+    append(Aux2,
+    [
+%           (:- multifile('$mycin_rule$'/2)),
+        ('$$eof$$'),
+        end_of_file
+    ],Clauses),
+    end_of_messages(Module),
+    true.
 
 %%----------------------------------------------------------------------
 %% VALIDATE CERTAINTY FACTOR AT RULE
@@ -112,75 +112,75 @@ sentence_tr(end_of_file,Clauses,Module) :-
 %% Simple fact rule
 
 sentence_tr(cf(Head,CF),[('$mycin_rule$'(Head,CF))],Module) :-
-	number(CF),
-	is_valid_cf(cf(Head,CF)),
-	!,
-	note_mycin_pred(Head,Module).
+    number(CF),
+    is_valid_cf(cf(Head,CF)),
+    !,
+    note_mycin_pred(Head,Module).
 
 %% Not a simple fact rule
 
 sentence_tr((cf(Head,CF) :- Body),
-            [('$mycin_rule$'(Head,CF) :- Body)], Module) :-
-	var(CF),
-	!,
-	note_mycin_pred(Head,Module),
-	message(Module,note,['Mycin metarule defined by: ',Head]).
+        [('$mycin_rule$'(Head,CF) :- Body)], Module) :-
+    var(CF),
+    !,
+    note_mycin_pred(Head,Module),
+    message(Module,note,['Mycin metarule defined by: ',Head]).
 
 sentence_tr((cf(Head,CF) :- Body),
-            [('$mycin_rule$'(Head,CF) :- Body)], Module) :-
-	is_valid_cf(cf(Head,CF)),
-	!,
-	note_mycin_pred(Head,Module),
-	message(Module,note,['Mycin metarule defined by: ',Head]).
+        [('$mycin_rule$'(Head,CF) :- Body)], Module) :-
+    is_valid_cf(cf(Head,CF)),
+    !,
+    note_mycin_pred(Head,Module),
+    message(Module,note,['Mycin metarule defined by: ',Head]).
 
 %% Invalid mycin rule
 
 sentence_tr(cf(Head,_),[],Module) :-
-	!,
-	functor(Head,F,A),
-	message(Module,error,
-          ['Illformed mycin rule for ',F,'/',A]).
+    !,
+    functor(Head,F,A),
+    message(Module,error,
+      ['Illformed mycin rule for ',F,'/',A]).
 
 %%----------------------------------------------------------------------
 %% EXPORTED RULES
 %%----------------------------------------------------------------------
 
 sentence_tr((:- export(F/A)),[],Module) :-
-	atom(F),
-	integer(A),
-	!,
-	if(exported(Module,F,A), 
-           true, 
-           asserta_fact(exported(Module,F,A))).
+    atom(F),
+    integer(A),
+    !,
+    if(exported(Module,F,A), 
+       true, 
+       asserta_fact(exported(Module,F,A))).
 
 %%----------------------------------------------------------------------
 %% AVOID SOME PROLOG DIRECTIVES
 %%----------------------------------------------------------------------
 
 sentence_tr((:- Directive),[],_) :-
-	allowed_directive(Directive),
-	!,
-        fail.
+    allowed_directive(Directive),
+    !,
+    fail.
 
 sentence_tr((:- Directive),[],Module) :-
-	!,
-	message(Module,
-                warning,
-                ['Compiler directive ignored: ',Directive]).
+    !,
+    message(Module,
+            warning,
+            ['Compiler directive ignored: ',Directive]).
 
 %%----------------------------------------------------------------------
 %% AVOID PROLOG RULES
 %%----------------------------------------------------------------------
 
 sentence_tr((Goal :- _),[],Module) :- 
-	functor(Goal,F,A),
-	message(Module,error,['clause for ',F,'/',A,' is not a mycin rule']),
-	!.
+    functor(Goal,F,A),
+    message(Module,error,['clause for ',F,'/',A,' is not a mycin rule']),
+    !.
 
 sentence_tr(Goal,[],Module) :- 
-	functor(Goal,F,A),
-	message(Module,error,['clause for ',F,'/',A,' is not a mycin rule']),
-	!.
+    functor(Goal,F,A),
+    message(Module,error,['clause for ',F,'/',A,' is not a mycin rule']),
+    !.
 
 %%----------------------------------------------------------------------
 %%
@@ -193,18 +193,18 @@ sentence_tr(Goal,[],Module) :-
 %%----------------------------------------------------------------------
 
 clause_tr(clause(0,0),_,Module) :-
-	start_of_messages(Module,'Compiling mycin rules'),
-	!,
-	fail.
+    start_of_messages(Module,'Compiling mycin rules'),
+    !,
+    fail.
 
 %%----------------------------------------------------------------------
 %% END OF EXPANSION
 %%----------------------------------------------------------------------
 
 clause_tr(clause('$$eof$$',_),_,Module) :-
-	end_of_messages(Module),
-	!,
-	fail.
+    end_of_messages(Module),
+    !,
+    fail.
 
 %%----------------------------------------------------------------------
 %% CLAUSE BODY EXPANSION
@@ -213,24 +213,24 @@ clause_tr(clause('$$eof$$',_),_,Module) :-
 % Compile mycin rule
 
 clause_tr(clause('$mycin_rule$'(Head,CF),Body),
-          clause('$mycin_rule$'(Head,CFResult),NewBody), Module) :-
-	Body \== true,
-	nonvar(CF),
-	!,
-	mycin_body_exp(Module,Body,ExpBody,[],CFList),
-	NewBody = (ExpBody,mycin_rulebase_rt:certainty_propagation(CF,CFList,CFResult)),
-	true.
+      clause('$mycin_rule$'(Head,CFResult),NewBody), Module) :-
+    Body \== true,
+    nonvar(CF),
+    !,
+    mycin_body_exp(Module,Body,ExpBody,[],CFList),
+    NewBody = (ExpBody,mycin_rulebase_rt:certainty_propagation(CF,CFList,CFResult)),
+    true.
 
 % Compile mycin metarule : body is not expanded
 
 clause_tr(clause('$mycin_rule$'(Head,CF),Body),
-          clause('$mycin_rule$'(Head,CF),
-                 if((Body,mycin_rulebase_rt:validate_metarule_cf(CF)),
-                    true,
-                    CF=0)),
-	  _Module) :- 
-	Body \== true,
-	var(CF).
+      clause('$mycin_rule$'(Head,CF),
+             if((Body,mycin_rulebase_rt:validate_metarule_cf(CF)),
+                true,
+                CF=0)),
+      _Module) :- 
+    Body \== true,
+    var(CF).
 
 %%----------------------------------------------------------------------
 %%
@@ -250,38 +250,38 @@ allowed_directive(use_module(_,_)).
 %%----------------------------------------------------------------------
 
 is_valid_cf(cf(Head,CF)) :-
-	var(CF),
-	nonvar(Head).
+    var(CF),
+    nonvar(Head).
 
 is_valid_cf(cf(Head,CF)) :-
-	nonvar(Head),
-	number(CF),
-	CF >= -1,
-	CF =< +1.
+    nonvar(Head),
+    number(CF),
+    CF >= -1,
+    CF =< +1.
 
 %%----------------------------------------------------------------------
 %% TAKE ACCOUNT OF MYCIN PRED (IF NEEDED)
 %%----------------------------------------------------------------------
 
 note_mycin_pred(Head,Module) :-
-	functor(Head,F,A),
-	(mycin_pred(Module,F,A) -> 
-	 true 
-        ; 
-         asserta_fact(mycin_pred(Module,F,A))
-        ).
+    functor(Head,F,A),
+    (mycin_pred(Module,F,A) -> 
+     true 
+    ; 
+     asserta_fact(mycin_pred(Module,F,A))
+    ).
 
 %%----------------------------------------------------------------------
 %% VALIDATE EXPORTS
 %%----------------------------------------------------------------------
 
 validate_exports(Module) :-
-	exported(Module,F,A),
-	\+ mycin_pred(Module,F,A),
-	retract_fact(exported(Module,F,A)),
-	message(Module,error,
-               ['No rules for exported ',F,'/',A]),
-	fail.
+    exported(Module,F,A),
+    \+ mycin_pred(Module,F,A),
+    retract_fact(exported(Module,F,A)),
+    message(Module,error,
+           ['No rules for exported ',F,'/',A]),
+    fail.
 
 validate_exports(_).
 
@@ -299,45 +299,45 @@ validate_exports(_).
 %%----------------------------------------------------------------------
 
 mycin_body_exp(Module,(Goal1,Goal2),(ExpGoal1,ExpGoal2),CFList,NewCFList) :-
-	!,
-	mycin_body_exp(Module,Goal1,ExpGoal1,CFList,AuxCFList),
-	mycin_body_exp(Module,Goal2,ExpGoal2,AuxCFList,NewCFList).
+    !,
+    mycin_body_exp(Module,Goal1,ExpGoal1,CFList,AuxCFList),
+    mycin_body_exp(Module,Goal2,ExpGoal2,AuxCFList,NewCFList).
 
 mycin_body_exp(Module,
-	       (Goal1;Goal2),
-	       (ExpGoal1,ExpGoal2,
-                  mycin_support:or_CF_inference(OrCFList,OrCF)
-	       ),
-	       PrevCFList,
-	       [OrCF|PrevCFList]) :-
-	!,
-	mycin_body_exp(Module,Goal1,ExpGoal1,[],CFList1),
-	mycin_body_exp(Module,Goal2,ExpGoal2,[],CFList2),
-	append(CFList1,CFList2,OrCFList).
+           (Goal1;Goal2),
+           (ExpGoal1,ExpGoal2,
+              mycin_support:or_CF_inference(OrCFList,OrCF)
+           ),
+           PrevCFList,
+           [OrCF|PrevCFList]) :-
+    !,
+    mycin_body_exp(Module,Goal1,ExpGoal1,[],CFList1),
+    mycin_body_exp(Module,Goal2,ExpGoal2,[],CFList2),
+    append(CFList1,CFList2,OrCFList).
 
 mycin_body_exp(Module,
-	       \+(Goal),
-	      % TODO: this as a negcf_list predicate!
-	      (ExpGoal,maplist((''(CF,NegCF) :- NegCF is -1*CF),CFList,NegCFList)),
-	      PrevCFList,
-	      NewCFList) :-
-	!,
-	length(CFList,Aux),
-	length(NegCFList,Aux),
-	mycin_body_exp(Module,Goal,ExpGoal,[],CFList),
-	append(PrevCFList,NegCFList,NewCFList).
+           \+(Goal),
+          % TODO: this as a negcf_list predicate!
+          (ExpGoal,maplist((''(CF,NegCF) :- NegCF is -1*CF),CFList,NegCFList)),
+          PrevCFList,
+          NewCFList) :-
+    !,
+    length(CFList,Aux),
+    length(NegCFList,Aux),
+    mycin_body_exp(Module,Goal,ExpGoal,[],CFList),
+    append(PrevCFList,NegCFList,NewCFList).
 
 mycin_body_exp(Module,'->'(Goal1,Goal2),ExpBody,PrevCFList,NewCFList) :-
-	!,
-	mycin_body_exp(Module,(\+(Goal1);Goal2),ExpBody,PrevCFList,NewCFList).
+    !,
+    mycin_body_exp(Module,(\+(Goal1);Goal2),ExpBody,PrevCFList,NewCFList).
 
 mycin_body_exp(Module,if(_,_,_),true,PrevCFList,PrevCFList) :-
-	!,
-	message(Module,error,['if/3 usage is not allowed in mycin rules']).
+    !,
+    message(Module,error,['if/3 usage is not allowed in mycin rules']).
 
 mycin_body_exp(Module,SingleGoal,ExpGoal,PrevCFList,[CF|PrevCFList]) :-
-	goal_exp(Module,SingleGoal,ExpGoal,CF),
-	!.
+    goal_exp(Module,SingleGoal,ExpGoal,CF),
+    !.
 
 mycin_body_exp(_Module,SingleGoal,SingleGoal,CFList,CFList).
 
@@ -348,31 +348,31 @@ mycin_body_exp(_Module,SingleGoal,SingleGoal,CFList,CFList).
 % Call to local rule
 
 goal_exp(Module,Module:Goal,'$mycin_rule$'(Goal,CF),CF) :-
-	functor(Goal,F,A),
-	mycin_pred(Module,F,A),
-	!.
+    functor(Goal,F,A),
+    mycin_pred(Module,F,A),
+    !.
 
 goal_exp(Module,Goal,'$mycin_rule$'(Goal,CF),CF) :-
-	functor(Goal,F,A),
-	mycin_pred(Module,F,A),
-	!.
+    functor(Goal,F,A),
+    mycin_pred(Module,F,A),
+    !.
 
 % Call to entry point in another mycin module
 
 goal_exp(Module,AtModule:Goal,AtModule:EntryPoint,CF) :-
-	atom(AtModule),
-	is_mycin_goal(Goal,AtModule),
-	AtModule \== Module,
-	Goal       =.. [F|Args],
-	EntryPoint =.. [F,CF|Args],
-	!.
+    atom(AtModule),
+    is_mycin_goal(Goal,AtModule),
+    AtModule \== Module,
+    Goal       =.. [F|Args],
+    EntryPoint =.. [F,CF|Args],
+    !.
 
 goal_exp(Module,Goal,AtModule:EntryPoint,CF) :-
-	is_mycin_goal(Goal,AtModule),
-	AtModule \== Module,
-	Goal       =.. [F|Args],
-	EntryPoint =.. [F,CF|Args],
-	!.
+    is_mycin_goal(Goal,AtModule),
+    AtModule \== Module,
+    Goal       =.. [F|Args],
+    EntryPoint =.. [F,CF|Args],
+    !.
 
 % Call to Prolog goal
 
@@ -384,8 +384,8 @@ goal_exp(_Module,Goal,mycin_rulebase_rt:mycinly(Goal,CF),CF).
 %%----------------------------------------------------------------------
 
 is_mycin_goal(Goal,AtModule) :-
-	functor(Goal,F,A),
-	c_itf:decl(Base,mycin_pred(F/A)),
-	AA is A+1,
-	c_itf:exports(Base,F,AA,static,_),
-	c_itf:defines_module(Base,AtModule).
+    functor(Goal,F,A),
+    c_itf:decl(Base,mycin_pred(F/A)),
+    AA is A+1,
+    c_itf:exports(Base,F,AA,static,_),
+    c_itf:defines_module(Base,AtModule).

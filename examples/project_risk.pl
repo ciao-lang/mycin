@@ -33,88 +33,88 @@
 :- export(org/1).
 
 org(by_applications) cf 0.9 :-
-	soft_reliability(high).
+    soft_reliability(high).
 
 org(by_applications) cf 0.5 :-
-	user_interaction(strong),
-	duration(high),
-	risk(high).
+    user_interaction(strong),
+    duration(high),
+    risk(high).
 
 org(by_applications) cf -1 :-
-	boss_availability(high).
+    boss_availability(high).
 
 %
 
 org(by_functions) cf 0.3 :-
-	technical_qualification(low).
+    technical_qualification(low).
 
 org(by_functions) cf 0.85 :-
-	tech_level(high),
-	risk(high).
+    tech_level(high),
+    risk(high).
 
 org(by_functions) cf -0.85 :-
-	soft_reliability(high).
+    soft_reliability(high).
 
 org(by_functions) cf -0.6 :-
-	boss_availability(high).
+    boss_availability(high).
 
 org(by_functions) cf -1 :-
-	user_interaction(strong).
+    user_interaction(strong).
 
 org(by_functions) cf -0.75 :-
-	duration(high).
+    duration(high).
 
 org(by_functions) cf -0.15 :-
-	new_employees(yes).
+    new_employees(yes).
 
 org(by_functions) cf -0.6 :-
-	technical_qualification(low).
+    technical_qualification(low).
 
 %
 
 org(weak_matrix) cf 0.9 :-
-	risk(high).
+    risk(high).
 
 org(weak_matrix) cf 0.3 :-
-	technical_qualification(high).
+    technical_qualification(high).
 
 org(weak_matrix) cf 0.65 :-
-	boss_availability(high),
-	new_employees(yes),
-	tech_level(high).
+    boss_availability(high),
+    new_employees(yes),
+    tech_level(high).
 
 org(weak_matrix) cf -1 :-
-	soft_reliability(high).
+    soft_reliability(high).
 
 org(weak_matrix) cf -0.85 :-
-	user_interaction(strong).
+    user_interaction(strong).
 
 org(weak_matrix) cf -0.4 :-
-	technical_qualification(low).
+    technical_qualification(low).
 
 %
 
 org(strong_matrix) cf 0.9 :-
-	boss_availability(high),
-	user_interaction(strong),
-	tech_level(high).
+    boss_availability(high),
+    user_interaction(strong),
+    tech_level(high).
 
 org(strong_matrix) cf 0.2 :-
-	technical_qualification(low),
-	new_employees(yes).
+    technical_qualification(low),
+    new_employees(yes).
 
 org(strong_matrix) cf 0.8 :-
-	risk(high).
+    risk(high).
 
 %
 
 org(by_projects) cf 0.8 :-
-	boss_availability(high),
-	user_interaction(strong),
-	soft_reliability(high).
+    boss_availability(high),
+    user_interaction(strong),
+    soft_reliability(high).
 
 org(by_projects) cf -0.85 :-
-	risk(high).
+    risk(high).
 
 %%----------------------------------------------------------------------
 %%
@@ -125,40 +125,40 @@ org(by_projects) cf -0.85 :-
 :- export(risk/1).
 
 risk(high) cf 0.8 :-
-	tech_level(high).
+    tech_level(high).
 
 risk(high) cf 0.3 :-
-	new_employees(yes).
+    new_employees(yes).
 
 risk(high) cf -0.35 :-
-	boss_availability(high).
+    boss_availability(high).
 
 risk(high) cf -0.3 :-
-	technical_qualification(high).
+    technical_qualification(high).
 
 risk(high) cf -0.25 :-
-	user_interaction(strong).
+    user_interaction(strong).
 
 risk(high) cf 0.4 :-
-	involves(some).
+    involves(some).
 
 risk(high) cf 0.75 :-
-	company_impact(high).
+    company_impact(high).
 
 risk(high) cf 0.55 :-
-	market_status(war),
-	imitation_time(short).
+    market_status(war),
+    imitation_time(short).
 
 rish(high) cf 0.37 :-
-	market_status(offensive),
-	imitation_time(short).
+    market_status(offensive),
+    imitation_time(short).
 
 risk(high) cf -0.3 :-
-	market_status(defensive),
-	imitation_time(short).
+    market_status(defensive),
+    imitation_time(short).
 
 risk(high) cf -0.4 :-
-	market_status(peace).
+    market_status(peace).
 
 %%----------------------------------------------------------------------
 %%
@@ -168,13 +168,13 @@ risk(high) cf -0.4 :-
 %%----------------------------------------------------------------------
 
 company_impact(high) cf 0.65 :-
-	kind(trans).
+    kind(trans).
 
 company_impact(high) cf 0.30 :-
-	kind(sis).
+    kind(sis).
 
 company_impact(high) cf -0.15 :-
-	new_employees(yes).
+    new_employees(yes).
 
 
 %%----------------------------------------------------------------------
@@ -192,32 +192,32 @@ company_impact(high) cf -0.15 :-
 :- export(market_status/1).
 
 market_status(war) cf 0.9 :-
-	kind(info),
-	company(proactive),
-	other_companies(proactive).
+    kind(info),
+    company(proactive),
+    other_companies(proactive).
 
 market_status(war) cf 0.7 :-
-	kind(trans),
-	company(proactive),
-	other_companies(proactive).
+    kind(trans),
+    company(proactive),
+    other_companies(proactive).
 
 market_status(war) cf -0.3 :-
-	barrier(yes).
+    barrier(yes).
 
 market_status(peace) cf 0.95 :-
-	company(reactive),
-	other_companies(reactive).
+    company(reactive),
+    other_companies(reactive).
 
 market_status(offensive) cf 0.95 :-
-	kind(info),
-	company(proactive),
-	other_companies(reactive).
+    kind(info),
+    company(proactive),
+    other_companies(reactive).
 
 market_status(offensive) cf 0.6 :-
-	kind(trans),
-	company(proactive),
-	other_companies(reactive).
+    kind(trans),
+    company(proactive),
+    other_companies(reactive).
 
 market_status(defensive) cf 1 :-
-	company(reactive),
-	other_companies(proactive).
+    company(reactive),
+    other_companies(proactive).

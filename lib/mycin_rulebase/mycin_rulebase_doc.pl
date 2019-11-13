@@ -64,34 +64,34 @@
 %%------------------------------------------------------------------------
 
 :- doc(export/1,
-	"This directive allows a given mycin predicate to be called
-         from Prolog programs and other rulebases. 
-         Exported mycin rules may be called @tt{entry points} in this
-         context.
+    "This directive allows a given mycin predicate to be called
+     from Prolog programs and other rulebases. 
+     Exported mycin rules may be called @tt{entry points} in this
+     context.
 
-         The way in which mycin rules are called
-         departs from Prolog ones. For instance, the followin mycin
-         predicate:
+     The way in which mycin rules are called
+     departs from Prolog ones. For instance, the followin mycin
+     predicate:
 @begin{verbatim}
 :- export p/1.
 @end{verbatim}
 
-         should be called from Prolog as: @tt{p(X) cf CF},
-         where CF will be binded to the resulting @concept{certainty factor}.
-         See @pred{cf/2} for further reference.
-         Obviously, the variables on @em{p/1} may be instantiated as you
-         wish.
-        ").
+     should be called from Prolog as: @tt{p(X) cf CF},
+     where CF will be binded to the resulting @concept{certainty factor}.
+     See @pred{cf/2} for further reference.
+     Obviously, the variables on @em{p/1} may be instantiated as you
+     wish.
+    ").
 
 :- decl export(Spec) #
-	"@var{Spec} will be a callable mycin predicate.".
+    "@var{Spec} will be a callable mycin predicate.".
 
 %%------------------------------------------------------------------------
 %% DOCUMENTATION ON HOW TO DECLARE MYCIN RULES
 %%------------------------------------------------------------------------
 
 :- doc(appendix,
-	"
+    "
  This section elaborates on the way in which @concept{mycin rules}
  are declared.
  There are two kind of mycin rules: those traditional modus-ponens rules
@@ -112,8 +112,8 @@
  the certainty factor for that rule. For example:
 @begin{verbatim}
  risk(high) cf -0.3 :-
-	market_status(defensive),
-	imitation_time(short).
+    market_status(defensive),
+    imitation_time(short).
 @end{verbatim}
  
  Rule bodies may contain a Prolog goal as well as a @concept{mycin goal}

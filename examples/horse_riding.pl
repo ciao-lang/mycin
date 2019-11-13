@@ -20,41 +20,41 @@ floor(dry) cf 0.4.
 :- export(winner/1).
 
 winner(arrow) cf 0.7 :- 
-	weather(sunny),
-	floor(wet).
+    weather(sunny),
+    floor(wet).
 
 winner(arrow) cf 0.6 :- 
-	weather(cloudy),
-	wind(yes).
+    weather(cloudy),
+    wind(yes).
 
 winner(arrow) cf 0.6 :- 
-	weather(rainy),
-	floor(dry).
+    weather(rainy),
+    floor(dry).
 
 %
 
 winner(thunder) cf 0.7 :- 
-	weather(sunny),
-	wind(yes).
+    weather(sunny),
+    wind(yes).
 
 winner(thunder) cf -0.7 :- 
-	weather(rainy),
-	floor(wet).
+    weather(rainy),
+    floor(wet).
 
 winner(thunder) cf -0.7 :-
-	weather(cloudy),
-	floor(wet).
+    weather(cloudy),
+    floor(wet).
 
 %
 
 winner(rolling_stone) cf 0.9 :-
-	weather(rainy),
-	wind(yes).
+    weather(rainy),
+    wind(yes).
 
 winner(rolling_stone) cf -0.6 :-
-	weather(cloudy),
-	floor(dry).
+    weather(cloudy),
+    floor(dry).
 
 winner(rolling_stone) cf -0.5 :-
-	weather(sunny),
-	floor(dry).
+    weather(sunny),
+    floor(dry).
