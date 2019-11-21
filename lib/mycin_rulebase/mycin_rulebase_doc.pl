@@ -77,7 +77,7 @@
 @end{verbatim}
 
      should be called from Prolog as: @tt{p(X) cf CF},
-     where CF will be binded to the resulting @concept{certainty factor}.
+     where CF will be bound to the resulting @concept{certainty factor}.
      See @pred{cf/2} for further reference.
      Obviously, the variables on @em{p/1} may be instantiated as you
      wish.
