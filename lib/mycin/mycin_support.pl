@@ -50,11 +50,10 @@ certainty_factor(CF) :-
 mycin_rule(cf(Fact,CF)) :-
     certainty_factor(CF),
     term(Fact).
-
 mycin_rule((cf(Fact,CF) :- Body)) :-
     certainty_factor(CF),
     term(Fact),
-    sequence(Body,term).
+    sequence(term,Body).
 
 :- export(mycin_goal/1).
 :- prop mycin_goal(Goal) #
