@@ -11,7 +11,7 @@
     :- use_package(mycin).
 @end{verbatim}
     For information about how to declare mycin rulebases refer
-    to @library{mycin_rulebase}.
+    to @lib{mycin_rulebase}.
     ").
 
 :- doc(module,
@@ -21,7 +21,7 @@
      via @pred{cf/2}.
 
      This package is automatically imported when defining 
-     @concept{mycin rules} using the @library{mycin_rulebase} package.
+     @concept{mycin rules} using the @lib{mycin_rulebase} package.
      ").
 
 :- use_module(library(aggregates), [bagof/3]).
