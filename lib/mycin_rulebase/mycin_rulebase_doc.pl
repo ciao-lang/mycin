@@ -158,7 +158,7 @@
  a certainty factor of 0 will be used, too. The programmer must take care
  of such constraint.
 
- The porpouse of metarules is to provide a simple way to perform mycin
+ The purpose of metarules is to provide a simple way to perform mycin
  inference from data or facts that may be stored in databases or other
  external resources.
       ").
