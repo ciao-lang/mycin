@@ -83,8 +83,7 @@
      wish.
     ").
 
-:- decl export(Spec) #
-    "@var{Spec} will be a callable mycin predicate.".
+:- decl export(Spec) # "@var{Spec} will be a callable mycin predicate.".
 
 %%------------------------------------------------------------------------
 %% DOCUMENTATION ON HOW TO DECLARE MYCIN RULES
