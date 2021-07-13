@@ -125,7 +125,7 @@
  the same used to import Prolog predicates.
 
  Note that rule bodies may also contain logical connectives as
- @tt{;/2}, @tt{->/2} and @tt{\\+/2} (@tt{if/3} is not allowed), however
+ @tt{;/2}, @tt{->/2} and @tt{\\\\+/2} (@tt{if/3} is not allowed), however
  their usage is discouraged. Meta-programming practiques are also
  strongly discouraged.
 
